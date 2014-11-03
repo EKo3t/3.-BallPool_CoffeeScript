@@ -2,19 +2,22 @@ init = ->
   document.getElementById("btn").onclick = ->
     alert "click!"
 
-  gameField = new rect("#555", 0, 0, 800, 600)
   canvas = document.getElementById("ballpool")
-  canvas.width = gameField.width
-  canvas.height = gameField.height
+  canvas.width = 800
+  canvas.height = 600
   context = canvas.getContext("2d")
+
+  gameField = rect(context, "#555", 0, 0, 800, 600)
   gameField.draw()
 
-rect = (color, x, y, width, height) ->
+rect = (context, color, x, y, width, height) ->
+  @context = context
   @color = color
   @x = x
   @y = y
   @width = width
   @height = height
   @draw = ->
-    context.fillStyle = @color
-    context.fillRect @x, @y, @width, @height
+    @context.fillStyle = @color
+    @context.fillRect @x, @y, @width, @height
+  return this
