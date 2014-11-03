@@ -1,2 +1,2 @@
-coffee -w -o javascript/ -c coffeescript/
+coffee -w -b -o javascript/ -c coffeescript/
 pause

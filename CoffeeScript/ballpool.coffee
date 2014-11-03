@@ -1,4 +1,7 @@
 init = ->
+  document.getElementById("btn").onclick = ->
+    alert "click!"
+
   gameField = new rect("#555", 0, 0, 800, 600)
   canvas = document.getElementById("ballpool")
   canvas.width = gameField.width
@@ -15,8 +18,3 @@ rect = (color, x, y, width, height) ->
   @draw = ->
     context.fillStyle = @color
     context.fillRect @x, @y, @width, @height
-
-document.getElementById("btn").onclick = ->
-  alert "click!"
-
-init()
