@@ -1,42 +1,35 @@
-init = ->
-  document.getElementById("btn").onclick = ->
-    alert "click!"
+class Rect
+  constructor: (@context, @color, @x, @y, @width, @height) ->
 
-  canvas = document.getElementById("ballpool")
-  canvas.width = 800
-  canvas.height = 600
-  context = canvas.getContext("2d")
-  simpleBall = ball(context, "#000", 400, 400, 10)
-  gameField = rect(context, "#555", 0, 0, 800, 600)
-  return draw()
-
-draw = ->
-  simpleBall.draw()
-  gameField.draw()
-
-
-rect = (context, color, x, y, width, height) ->
-  @context = context
-  @color = color
-  @x = x
-  @y = y
-  @width = width
-  @height = height
-  @draw = ->
+  draw: ->
     @context.fillStyle = @color
     @context.fillRect @x, @y, @width, @height
-  return this
 
-ball = (context, color, x, y, radius) ->
-  @context = context
-  @color = color
-  @centerX = x
-  @centerY = y
-  @radius = radius
-  @draw = ->
+	
+class Ball
+  constructor: (@context, @color, @x, @y, @radius) ->
+  
+  draw: ->
     @context.beginPath()
-    @context.arc(centerX, centerY, radius, 0, Math.PI*2, false)
+    @context.arc(@x, @y, @radius, 0, Math.PI*2)
     @context.stroke()
-    @context.fillStyle='red'    
+    @context.fillStyle = @color
     @context.fill()
-  return this
+	
+	
+class Game
+  init: ->
+    canvas = document.getElementById("ballpool")
+    canvas.width = 800
+    canvas.height = 600
+    @context = canvas.getContext("2d")
+
+    @simpleBall = new Ball(@context, "#FF0000", 100, 100, 10)
+    @gameField = new Rect(@context, "#AAAAAA", 0, 0, 800, 600)
+
+  draw: ->
+    @gameField.draw()
+    @simpleBall.draw()
+
+	
+game = new Game()
