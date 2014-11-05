@@ -17,8 +17,8 @@ class Ball
     @context.fill()
 
   move: (dx, dy) ->
-    @x = @x + dx
-    @y = @y + dy
+    @x += dx
+    @y += dy
 	
 	
 class Game
@@ -41,11 +41,13 @@ class Game
     @draw()
 
   animate: ->    
-    animation = ->
-      @update()
-      setTimeout animation 1000
+    animation = (obj) ->
+      obj.update()
+      #setTimeout animation(obj) 1000
+    animation(this)
 
   updatePosition: () ->
     @simpleBall.move(3,3)  
+
 
 game = new Game()
