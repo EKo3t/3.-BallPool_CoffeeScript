@@ -43,7 +43,7 @@ class Game
   animate: ->    
     animation = (obj) ->
       obj.update()
-      #setTimeout animation(obj) 1000
+      setTimeout((-> animation obj),100)
     animation(this)
 
   updatePosition: () ->
