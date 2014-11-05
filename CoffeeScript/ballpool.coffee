@@ -15,6 +15,10 @@ class Ball
     @context.stroke()
     @context.fillStyle = @color
     @context.fill()
+
+  move: (dx, dy) ->
+    @x = @x + dx
+    @y = @y + dy
 	
 	
 class Game
@@ -31,5 +35,17 @@ class Game
     @gameField.draw()
     @simpleBall.draw()
 
-	
+  update: ->
+    @context.clearRect(0,0, 800, 600)
+    @updatePosition()
+    @draw()
+
+  animate: ->    
+    animation = ->
+      @update()
+      setTimeout animation 1000
+
+  updatePosition: () ->
+    @simpleBall.move(3,3)  
+
 game = new Game()
