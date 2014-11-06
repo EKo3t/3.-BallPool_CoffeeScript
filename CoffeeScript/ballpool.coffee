@@ -5,7 +5,7 @@ class Rect
     @context.fillStyle = @color
     @context.fillRect @x, @y, @width, @height
 
-	
+
 class Ball
   constructor: (@context, @color, @x, @y, @radius, @vx, @vy) ->
   
@@ -17,12 +17,13 @@ class Ball
     @context.fill()
 
   move: (@vx, @vy, width, height) ->
-    checkBorder: (x, vx, border) ->
+    alert("test")
+    checkBorder = (x, vx, border) ->
       dvx = Infinity
       if Math.abs(border - x) < vx
         dvx = Math.abs(border - x)
       return
-    getMin: (x, y) ->
+    getMin = (x, y) ->
       if x < y
         min = x
       else
