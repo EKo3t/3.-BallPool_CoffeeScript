@@ -39,42 +39,40 @@ Ball = (function() {
     return this.context.fill();
   };
 
-  Ball.prototype.checkBorder = function(x, vx, border) {
-    var dvx;
-    dvx = vx;
-    if (Math.abs(border - x) < vx) {
-      dvx = Math.abs(border - x);
-    }
-  };
-
-  Ball.prototype.getMin = function(x, y) {
-    var min;
-    if (x < y) {
-      min = x;
-    } else {
-      min = y;
-    }
-  };
-
   Ball.prototype.move = function(vx, vy, width, height) {
-    var dv, dvx, dvy;
-    this.vx = vx;
-    this.vy = vy;
-    if ((this.vx === 0) && (this.vy === 0)) {
-      return;
-    }
-    dvx = checkBorder(this.x, this.vx, width);
-    dvy = checkBorder(this.y, this.vy, height);
-    dv = getMin(dvx, dvy);
-    this.x += this.vx * dv;
-    this.y += this.vy * dv;
-    console.log(this.x, this.y);
+    var checkBorder, dv, dvx, dvy, getMin;
+    checkBorder = function(x, vx, radius, border) {
+      var dvx;
+      dvx = vx + 1;
+      if ((x + radius + vx > border) && (vx > 0)) {
+        dvx = border - x - radius;
+      }
+      if ((x - radius + vx < 0) && (vx < 0)) {
+        dvx = x - radius;
+      }
+      return dvx;
+    };
+    getMin = function(x, y) {
+      var min;
+      if (x < y) {
+        min = x;
+      } else {
+        min = y;
+      }
+      return min;
+    };
+    dvx = checkBorder(this.x, vx, this.radius, width);
+    dvy = checkBorder(this.y, vy, this.radius, height);
+    dv = getMin(dvx / vx, dvy / vy);
+    this.x += vx * dv;
+    this.y += vy * dv;
     if (dvx < dvy) {
       this.vx = -this.vx;
     }
     if (dvy < dvx) {
-      return this.vy = -this.vy;
+      this.vy = -this.vy;
     }
+    return console.log("Size " + width, height + " x&y " + this.x, this.y + " vx&vy " + this.vx, this.vy);
   };
 
   return Ball;
@@ -96,7 +94,8 @@ Game = (function() {
 
   Game.prototype.draw = function() {
     this.gameField.draw();
-    return this.simpleBall.draw();
+    this.simpleBall.draw();
+    return console.log(this.simpleBall.vx, this.simpleBall.vy);
   };
 
   Game.prototype.update = function() {
@@ -108,10 +107,7 @@ Game = (function() {
   Game.prototype.animate = function() {
     var animation;
     animation = function(obj) {
-      obj.update();
-      return setTimeout((function() {
-        return animation(obj);
-      }), 700);
+      return obj.update();
     };
     return animation(this);
   };

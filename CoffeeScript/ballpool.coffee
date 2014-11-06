@@ -16,47 +16,30 @@ class Ball
     @context.fillStyle = @color
     @context.fill()
 
-  checkBorder: (x, vx, border) ->
-    dvx = vx
-    if Math.abs(border - x) < vx
-      dvx = Math.abs(border - x)
-    return
-
-  getMin: (x, y) ->
-    if x < y
-      min = x
-    else
-      min = y
-    return
-
-  move: (@vx, @vy, width, height) ->
-<<<<<<< HEAD
-=======
-    alert("test")
-    checkBorder = (x, vx, border) ->
-      dvx = Infinity
-      if Math.abs(border - x) < vx
-        dvx = Math.abs(border - x)
-      return
+  move: (vx, vy, width, height) ->
+    checkBorder = (x, vx, radius, border) ->
+      dvx = vx + 1
+      if (x + radius + vx > border) && (vx > 0)
+        dvx = border - x - radius
+      if (x - radius + vx < 0) && (vx < 0)
+        dvx = x - radius
+      return dvx
     getMin = (x, y) ->
       if x < y
         min = x
       else
         min = y
-      return
->>>>>>> origin/master
-    if (@vx == 0)&&(@vy == 0)
-      return
-    dvx = checkBorder(@x, @vx, width)
-    dvy = checkBorder(@y, @vy, height)
-    dv = getMin(dvx, dvy)
-    @x += @vx * dv
-    @y += @vy * dv
-    console.log(@x, @y)
+      return min
+    dvx = checkBorder(@x, vx, @radius, width)
+    dvy = checkBorder(@y, vy, @radius, height)
+    dv = getMin(dvx / vx, dvy / vy)
+    @x += vx * dv
+    @y += vy * dv
     if (dvx < dvy)
       @vx = -@vx
     if (dvy < dvx)
       @vy = -@vy
+    console.log("Size " + width, height + " x&y " + @x, @y + " vx&vy " + @vx, @vy)
 
 class Game
   init: ->
@@ -71,6 +54,7 @@ class Game
   draw: ->
     @gameField.draw()
     @simpleBall.draw()
+    console.log(@simpleBall.vx, @simpleBall.vy)
 
   update: ->
     @context.clearRect(0,0, 800, 600)
@@ -80,7 +64,7 @@ class Game
   animate: ->    
     animation = (obj) ->
       obj.update()
-      setTimeout((-> animation obj),700)
+      ##setTimeout((-> animation obj),700)##
     animation(this)
 
   updatePosition: () ->

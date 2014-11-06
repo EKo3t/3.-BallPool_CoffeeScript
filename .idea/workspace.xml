@@ -3,6 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="c8fee3fb-7a0b-48a9-a689-0e8e47a963ec" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/CoffeeScript/ballpool.coffee" afterPath="$PROJECT_DIR$/CoffeeScript/ballpool.coffee" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ballpool.js" afterPath="$PROJECT_DIR$/ballpool.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/JavaScript/ballpool.js" afterPath="$PROJECT_DIR$/JavaScript/ballpool.js" />
     </list>
     <ignored path="3.-BallPool_CoffeeScript.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -26,25 +28,28 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="ballpool.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="ballpool.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ballpool.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.010067114" vertical-offset="1745" max-vertical-offset="2346">
-              <caret line="103" column="0" selection-start-line="103" selection-start-column="0" selection-end-line="103" selection-end-column="0" />
-              <folding />
+            <state vertical-scroll-proportion="0.0" vertical-offset="776" max-vertical-offset="2244">
+              <caret line="69" column="5" selection-start-line="69" selection-start-column="5" selection-end-line="69" selection-end-column="5" />
+              <folding>
+                <marker date="1415276004657" expanded="true" signature="1159:1298" placeholder="{...}" />
+                <marker date="1415276004657" expanded="true" signature="1134:1176" placeholder="{...}" />
+                <marker date="1415276004657" expanded="true" signature="1313:1404" placeholder="{...}" />
+                <marker date="1415276004657" expanded="true" signature="1328:1355" placeholder="{...}" />
+                <marker date="1415276004657" expanded="true" signature="1361:1389" placeholder="{...}" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ballpool.coffee" pinned="false" current-in-tab="false">
+      <file leaf-file-name="ballpool.coffee" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/CoffeeScript/ballpool.coffee">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-14.0" vertical-offset="517" max-vertical-offset="1649">
-              <caret line="51" column="4" selection-start-line="51" selection-start-column="4" selection-end-line="51" selection-end-column="4" />
-              <folding>
-                <marker date="1415269714786" expanded="true" signature="941:1221" placeholder="..." />
-                <marker date="1415269714786" expanded="true" signature="946:1221" placeholder="..." />
-              </folding>
+            <state vertical-scroll-proportion="0.68596494" vertical-offset="255" max-vertical-offset="1377">
+              <caret line="38" column="6" selection-start-line="38" selection-start-column="6" selection-end-line="38" selection-end-column="6" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -52,7 +57,7 @@
       <file leaf-file-name="ballpool.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ballpool.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="323">
+            <state vertical-scroll-proportion="-0.0" vertical-offset="0" max-vertical-offset="323">
               <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
@@ -138,7 +143,7 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="HbShouldOpenHtmlAsHb" value="" />
     <property name="recentsLimit" value="5" />
-    <property name="options.lastSelected" value="preferences.pluginManager" />
+    <property name="options.lastSelected" value="usage.statistics" />
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="options.splitter.details.proportions" value="0.2" />
     <property name="FullScreen" value="false" />
@@ -218,7 +223,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="22" width="1382" height="754" extended-state="7" />
+    <frame x="-8" y="22" width="1382" height="754" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -268,7 +273,13 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="1609" max-vertical-offset="2193">
           <caret line="95" column="0" selection-start-line="95" selection-start-column="0" selection-end-line="95" selection-end-column="0" />
-          <folding />
+          <folding>
+            <marker date="1415276004657" expanded="true" signature="1159:1298" placeholder="{...}" />
+            <marker date="1415276004657" expanded="true" signature="1134:1176" placeholder="{...}" />
+            <marker date="1415276004657" expanded="true" signature="1313:1404" placeholder="{...}" />
+            <marker date="1415276004657" expanded="true" signature="1328:1355" placeholder="{...}" />
+            <marker date="1415276004657" expanded="true" signature="1361:1389" placeholder="{...}" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -276,10 +287,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1343">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <marker date="1415269714786" expanded="true" signature="941:1221" placeholder="..." />
-            <marker date="1415269714786" expanded="true" signature="946:1221" placeholder="..." />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -295,7 +303,13 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1615">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <marker date="1415276004657" expanded="true" signature="1159:1298" placeholder="{...}" />
+            <marker date="1415276004657" expanded="true" signature="1134:1176" placeholder="{...}" />
+            <marker date="1415276004657" expanded="true" signature="1313:1404" placeholder="{...}" />
+            <marker date="1415276004657" expanded="true" signature="1328:1355" placeholder="{...}" />
+            <marker date="1415276004657" expanded="true" signature="1361:1389" placeholder="{...}" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -311,7 +325,13 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="391" max-vertical-offset="969">
           <caret line="23" column="17" selection-start-line="23" selection-start-column="17" selection-end-line="23" selection-end-column="17" />
-          <folding />
+          <folding>
+            <marker date="1415276004657" expanded="true" signature="1159:1298" placeholder="{...}" />
+            <marker date="1415276004657" expanded="true" signature="1134:1176" placeholder="{...}" />
+            <marker date="1415276004657" expanded="true" signature="1313:1404" placeholder="{...}" />
+            <marker date="1415276004657" expanded="true" signature="1328:1355" placeholder="{...}" />
+            <marker date="1415276004657" expanded="true" signature="1361:1389" placeholder="{...}" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -319,9 +339,20 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="816">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ballpool.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="776" max-vertical-offset="2244">
+          <caret line="69" column="5" selection-start-line="69" selection-start-column="5" selection-end-line="69" selection-end-column="5" />
           <folding>
-            <marker date="1415269714786" expanded="true" signature="941:1221" placeholder="..." />
-            <marker date="1415269714786" expanded="true" signature="946:1221" placeholder="..." />
+            <marker date="1415276004657" expanded="true" signature="1159:1298" placeholder="{...}" />
+            <marker date="1415276004657" expanded="true" signature="1134:1176" placeholder="{...}" />
+            <marker date="1415276004657" expanded="true" signature="1313:1404" placeholder="{...}" />
+            <marker date="1415276004657" expanded="true" signature="1328:1355" placeholder="{...}" />
+            <marker date="1415276004657" expanded="true" signature="1361:1389" placeholder="{...}" />
           </folding>
         </state>
       </provider>
@@ -336,22 +367,26 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/CoffeeScript/ballpool.coffee">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-14.0" vertical-offset="517" max-vertical-offset="1649">
-          <caret line="51" column="4" selection-start-line="51" selection-start-column="4" selection-end-line="51" selection-end-column="4" />
-          <folding>
-            <marker date="1415269714786" expanded="true" signature="941:1221" placeholder="..." />
-            <marker date="1415269714786" expanded="true" signature="946:1221" placeholder="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ballpool.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.010067114" vertical-offset="1745" max-vertical-offset="2346">
-          <caret line="103" column="0" selection-start-line="103" selection-start-column="0" selection-end-line="103" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.68596494" vertical-offset="255" max-vertical-offset="1377">
+          <caret line="38" column="6" selection-start-line="38" selection-start-column="6" selection-end-line="38" selection-end-column="6" />
           <folding />
         </state>
       </provider>
     </entry>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ScopeChooserConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
   </component>
 </project>
