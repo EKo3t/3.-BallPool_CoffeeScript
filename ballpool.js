@@ -39,27 +39,27 @@ Ball = (function() {
     return this.context.fill();
   };
 
+  Ball.prototype.checkBorder = function(x, vx, border) {
+    var dvx;
+    dvx = Infinity;
+    if (Math.abs(border - x) < vx) {
+      dvx = Math.abs(border - x);
+    }
+  };
+
+  Ball.prototype.getMin = function(x, y) {
+    var min;
+    if (x < y) {
+      min = x;
+    } else {
+      min = y;
+    }
+  };
+
   Ball.prototype.move = function(vx, vy, width, height) {
     var dv, dvx, dvy;
     this.vx = vx;
     this.vy = vy;
-    ({
-      checkBorder: function(x, vx, border) {
-        var dvx;
-        dvx = Infinity;
-        if (Math.abs(border - x) < vx) {
-          dvx = Math.abs(border - x);
-        }
-      },
-      getMin: function(x, y) {
-        var min;
-        if (x < y) {
-          min = x;
-        } else {
-          min = y;
-        }
-      }
-    });
     if ((this.vx === 0) && (this.vy === 0)) {
       return;
     }

@@ -16,27 +16,28 @@ class Ball
     @context.fillStyle = @color
     @context.fill()
 
+  checkBorder: (x, vx, border) ->
+    dvx = vx
+    if Math.abs(border - x) < vx
+      dvx = Math.abs(border - x)
+    return
+
+  getMin: (x, y) ->
+    if x < y
+      min = x
+    else
+      min = y
+    return
+
   move: (@vx, @vy, width, height) ->
-    checkBorder: (x, vx, border) ->
-      dvx = Infinity
-      if Math.abs(border - x) < vx
-        dvx = Math.abs(border - x)
-      return
-    getMin: (x, y) ->
-      if x < y
-        min = x
-      else
-        min = y
-      return
     if (@vx == 0)&&(@vy == 0)
       return
     dvx = checkBorder(@x, @vx, width)
     dvy = checkBorder(@y, @vy, height)
     dv = getMin(dvx, dvy)
-    if dv < Infinity
-      @x += @vx * dv
-      @y += @vy * dv
-      console.log(@x, @y)
+    @x += @vx * dv
+    @y += @vy * dv
+    console.log(@x, @y)
     if (dvx < dvy)
       @vx = -@vx
     if (dvy < dvx)
