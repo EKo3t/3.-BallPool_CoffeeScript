@@ -21,14 +21,12 @@ Rect = (function() {
 })();
 
 Ball = (function() {
-  function Ball(context, color, x, y, radius, vx, vy) {
+  function Ball(context, color, x, y, radius) {
     this.context = context;
     this.color = color;
     this.x = x;
     this.y = y;
     this.radius = radius;
-    this.vx = vx;
-    this.vy = vy;
   }
 
   Ball.prototype.draw = function() {
@@ -39,44 +37,9 @@ Ball = (function() {
     return this.context.fill();
   };
 
-  Ball.prototype.move = function(vx, vy, width, height) {
-    var dv, dvx, dvy;
-    this.vx = vx;
-    this.vy = vy;
-    ({
-      checkBorder: function(x, vx, border) {
-        var dvx;
-        dvx = Infinity;
-        if (Math.abs(border - x) < vx) {
-          dvx = Math.abs(border - x);
-        }
-      },
-      getMin: function(x, y) {
-        var min;
-        if (x < y) {
-          min = x;
-        } else {
-          min = y;
-        }
-      }
-    });
-    if ((this.vx === 0) && (this.vy === 0)) {
-      return;
-    }
-    dvx = checkBorder(this.x, this.vx, width);
-    dvy = checkBorder(this.y, this.vy, height);
-    dv = getMin(dvx, dvy);
-    if (dv < Infinity) {
-      this.x += this.vx * dv;
-      this.y += this.vy * dv;
-      console.log(this.x, this.y);
-    }
-    if (dvx < dvy) {
-      this.vx = -this.vx;
-    }
-    if (dvy < dvx) {
-      return this.vy = -this.vy;
-    }
+  Ball.prototype.move = function(dx, dy) {
+    this.x += dx;
+    return this.y += dy;
   };
 
   return Ball;
@@ -92,7 +55,7 @@ Game = (function() {
     canvas.width = 800;
     canvas.height = 600;
     this.context = canvas.getContext("2d");
-    this.simpleBall = new Ball(this.context, "#FF0000", 500, 500, 10, 10, 10);
+    this.simpleBall = new Ball(this.context, "#FF0000", 100, 100, 10);
     return this.gameField = new Rect(this.context, "#AAAAAA", 0, 0, 800, 600);
   };
 
@@ -110,19 +73,13 @@ Game = (function() {
   Game.prototype.animate = function() {
     var animation;
     animation = function(obj) {
-      obj.update();
-      return setTimeout((function() {
-        return animation(obj);
-      }), 700);
+      return obj.update();
     };
     return animation(this);
   };
 
   Game.prototype.updatePosition = function() {
-    var height, width;
-    width = game.gameField.width;
-    height = game.gameField.height;
-    return this.simpleBall.move(this.simpleBall.vx, this.simpleBall.vy, width, height);
+    return this.simpleBall.move(3, 3);
   };
 
   return Game;
