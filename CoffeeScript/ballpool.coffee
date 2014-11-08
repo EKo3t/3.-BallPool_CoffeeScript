@@ -1,4 +1,28 @@
-class Rect
+Vector = (x, y) ->
+  @x = x
+  @y = y
+  return
+
+Vector::dot = (v) ->
+  @x * v.x + @y * v.y
+
+Vector::length = ->
+  Math.sqrt @x * @x + @y * @y
+
+Vector::normalize = ->
+  s = 1 / @length()
+  @x *= s
+  @y *= s
+  this
+
+Vector::multiply = (s) ->
+  new Vector(@x * s, @y * s)
+
+Vector::addVector = (v) ->
+  @x += v.x
+  @y += v.y
+  this
+
 class Rect
   constructor: (@context, @color, @x, @y, @width, @height) ->
 
@@ -8,11 +32,14 @@ class Rect
 
 
 class Ball
-  constructor: (@context, @color, @x, @y, @radius, @vx, @vy) ->
-  
+  constructor: (@context, @color, x, y, @radius, vx, vy) ->
+    @m = 10
+    @point = new Vector(x, y)
+    @movVector = new Vector(vx, vy)
+
   draw: ->
     @context.beginPath()
-    @context.arc(@x, @y, @radius, 0, Math.PI*2)
+    @context.arc(@point.x, @point.y, @radius, 0, Math.PI*2)
     @context.stroke()
     @context.fillStyle = @color
     @context.fill()
@@ -32,20 +59,43 @@ class Ball
         min = x
       return min
 
-    dvx = checkBorder(@x, vx, @radius, width)
-    dvy = checkBorder(@y, vy, @radius, height)
+    dvx = checkBorder(@point.x, @movVector.vx, @radius, width)
+    dvy = checkBorder(@point.y, @movVector.vy, @radius, height)
     dv = Math.abs(getMin(dvx / vx, dvy / vy))
-    console.log(@x, @y, vx, vy, width, height, dv, dvx, dvy)
     if dv == Infinity
-      @x = @x + vx
-      @y = @y + vy
+      @point.x = @point.x + vx
+      @point.y = @point.y + vy
     else
-      @x += vx * dv
-      @y += vy * dv
+      @point.x += vx * dv
+      @point.y += vy * dv
     if (Math.abs(dvx / vx) <= 1)
-      @vx = -@vx
+      @movVector.vx = -@movVector.vx
     if (Math.abs(dvy / vy) <= 1)
-      @vy = -@vy
+      @movVector.vy = -@movVector.vy
+
+ ### checkBallCollision: (ball) ->
+    dt = undefined
+    mT = undefined
+    v1 = undefined
+    v2 = undefined
+    cr = undefined
+    massSum = undefined
+    coorDifference = new Vector(@x - ball.x, @y - ball.y)
+    radiusSum = @radius + ball.radius
+    distance = coorDifference.length()
+    return  if distance > radiusSum
+    massSum = @m + ball.m
+    coorDifference.normalize()
+    dt = new Vector(coorDifference.y, -coorDifference.x)
+    mT = coorDifference.multiply(@radius + ball.radius - distance)
+    @p.addVector mT.multiply(ball.m / massSum)
+    ball.p.addVector mT.multiply(-@m / massSum)
+    v1 = distance.multiply(@v.dot(coorDifference)).length()
+    v2 = distance.multiply(ball.v.dot(coorDifference)).length()
+    @v = dt.multiply(@v.dot(dt))
+    @v.tx coorDifference.multiply((ball.m * (v2 - v1) + @m * v1 + ball.m * v2) / massSum)
+    ball.v = dt.multiply(ball.v.dot(dt))
+    ball.v.addVector coorDifference.multiply((@m * (v1 - v2) + ball.m * v2 + @m * v1) / massSum)###
 
 class Game
   init: ->
@@ -61,7 +111,9 @@ class Game
     parentPosition = getPosition(e.currentTarget)
     xPosition = e.clientX - parentPosition.x
     yPosition = e.clientY - parentPosition.y
-    game.simpleBalls.push new Ball(game.context, "red", xPosition, yPosition, 10, 2, 2)
+    newBall = new Ball(game.context, "red", xPosition, yPosition, 10, 2, 2)
+    game.simpleBalls.push newBall
+    newBall.draw()
 
   getPosition = (element) ->
     xPosition = 0
@@ -77,7 +129,6 @@ class Game
     @canvas.addEventListener "mousedown", @getClickPosition, false
 
   draw: ->
-    console.log(@simpleBalls)
     for ball in @simpleBalls
       ball.draw()
 
@@ -96,6 +147,9 @@ class Game
     width = game.gameField.width
     height = game.gameField.height
     for ball in @simpleBalls
-      ball.move(ball.vx, ball.vy, width, height)
+      ###for ball2 in @simpleBalls
+        if ball != ball2
+          ball.checkBallCollision(ball2)###
+      ball.move(ball.movVector.vx, ball.movVector.vy, width, height)
 
 game = new Game()
