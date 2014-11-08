@@ -1,5 +1,4 @@
 class Rect
-class Rect
   constructor: (@context, @color, @x, @y, @width, @height) ->
 
   draw: ->
@@ -55,31 +54,19 @@ class Game
     @context = @canvas.getContext("2d")
     @gameField = new Rect(@context, "#AAAAAA", 0, 0, 800, 600)
     @gameField.draw()
-    @simpleBalls = []
-
-  getClickPosition: (e) ->
-    parentPosition = getPosition(e.currentTarget)
-    xPosition = e.clientX - parentPosition.x
-    yPosition = e.clientY - parentPosition.y
-    game.simpleBalls.push new Ball(game.context, "red", xPosition, yPosition, 10, 2, 2)
-
-  getPosition = (element) ->
-    xPosition = 0
-    yPosition = 0
-    while element
-      xPosition += (element.offsetLeft - element.scrollLeft + element.clientLeft)
-      yPosition += (element.offsetTop - element.scrollTop + element.clientTop)
-      element = element.offsetParent
-    x: xPosition
-    y: yPosition
 
   createBallButton: ->
-    @canvas.addEventListener "mousedown", @getClickPosition, false
+    getClickPosition = (e) =>
+      xPosition = e.clientX
+      yPosition = e.clientY
+      console.log(xPosition, yPosition)
+      @simpleBall = new Ball(@context, "red", xPosition, yPosition, 10, 2, 2)
+
+    @canvas.addEventListener "onclick", getClickPosition(game.gameField), false
 
   draw: ->
-    console.log(@simpleBalls)
-    for ball in @simpleBalls
-      ball.draw()
+    @gameField.draw()
+    @simpleBall.draw()
 
   update: ->
     @context.clearRect(0,0, 800, 600)
@@ -95,7 +82,6 @@ class Game
   updatePosition: () ->
     width = game.gameField.width
     height = game.gameField.height
-    for ball in @simpleBalls
-      ball.move(ball.vx, ball.vy, width, height)
+    @simpleBall.move(@simpleBall.vx, @simpleBall.vy, width, height)
 
 game = new Game()
