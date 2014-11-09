@@ -33,7 +33,7 @@ class Rect
 
 class Ball
   constructor: (@context, @color, x, y, @radius, vx, vy) ->
-    @m = 10
+    @mass = 1
     @point = new Vector(x, y)
     @movVector = new Vector(vx, vy)
 
@@ -44,58 +44,70 @@ class Ball
     @context.fillStyle = @color
     @context.fill()
 
-  move: (vx, vy, width, height) =>
+  checkBallAndBorder: (vx, vy, width, height) ->
     checkBorder = (x, vx, radius, border) ->
       dvx = Infinity
-      if (x + radius + vx >= border) && (vx > 0)
-        dvx = border - x - radius
-      if (x - radius + vx <= 0) && (vx < 0)
-        dvx = x - radius
+      if (x + radius + vx >= border)
+        dvx = Math.abs(border - x - radius)
+      if (x - radius + vx <= 0)
+        dvx = Math.abs(x - radius)
       return dvx
-
     getMin = (x, y) ->
       min = y
       if x < y
         min = x
       return min
-
-    dvx = checkBorder(@point.x, @movVector.vx, @radius, width)
-    dvy = checkBorder(@point.y, @movVector.vy, @radius, height)
+    dvx = checkBorder(@point.x, @movVector.x, @radius, width)
+    dvy = checkBorder(@point.y, @movVector.y, @radius, height)
     dv = Math.abs(getMin(dvx / vx, dvy / vy))
     if dv == Infinity
-      @point.x = @point.x + vx
-      @point.y = @point.y + vy
+      console.log("maybe shit")
+      yRatio: dvy / vy
+      xRatio: dvx / vx
+      minRatio: 1
     else
-      @point.x += vx * dv
-      @point.y += vy * dv
-    if (Math.abs(dvx / vx) <= 1)
-      @movVector.vx = -@movVector.vx
-    if (Math.abs(dvy / vy) <= 1)
-      @movVector.vy = -@movVector.vy
+      yRatio: dvy / vy
+      xRatio: dvx / vx
+      minRatio: dv
 
- ### checkBallCollision: (ball) ->
-    dt = undefined
-    mT = undefined
-    v1 = undefined
-    v2 = undefined
-    cr = undefined
-    massSum = undefined
-    coorDifference = new Vector(@x - ball.x, @y - ball.y)
+  move: (vx, vy, ratio) ->
+    @point.x += vx * ratio
+    @point.y += vy * ratio
+
+  checkInvertMove: (xRatio, yRatio) ->
+    if (Math.abs(xRatio / @movVector.x) <= 1)
+      @movVector.x = -@movVector.x
+    if (Math.abs(yRatio / @movVector.y) <= 1)
+      @movVector.y = -@movVector.y
+
+  addGravity: (gravity) ->
+    @movVector.y += gravity
+
+  checkBallCollision: (ball, width, height) ->
+    coorDifference = new Vector(@point.x - ball.point.x, @point.y - ball.point.y)
     radiusSum = @radius + ball.radius
     distance = coorDifference.length()
     return  if distance > radiusSum
-    massSum = @m + ball.m
+    massSum = @mass + ball.mass
     coorDifference.normalize()
     dt = new Vector(coorDifference.y, -coorDifference.x)
     mT = coorDifference.multiply(@radius + ball.radius - distance)
-    @p.addVector mT.multiply(ball.m / massSum)
-    ball.p.addVector mT.multiply(-@m / massSum)
-    v1 = distance.multiply(@v.dot(coorDifference)).length()
-    v2 = distance.multiply(ball.v.dot(coorDifference)).length()
-    @v = dt.multiply(@v.dot(dt))
-    @v.tx coorDifference.multiply((ball.m * (v2 - v1) + @m * v1 + ball.m * v2) / massSum)
-    ball.v = dt.multiply(ball.v.dot(dt))
-    ball.v.addVector coorDifference.multiply((@m * (v1 - v2) + ball.m * v2 + @m * v1) / massSum)###
+    mtMul = mT.multiply(ball.mass / massSum)
+    @checkBorderMoveAndInvert(mtMul.x, mtMul.y, width, height)
+    mtMul = mT.multiply(-@mass / massSum)
+    @checkBorderMoveAndInvert(mtMul.x, mtMul.y, width, height)
+    dotTemp = @movVector.dot(coorDifference)
+    v1 = coorDifference.multiply(dotTemp).length()
+    v2 = coorDifference.multiply(ball.movVector.dot(coorDifference)).length()
+    @movVector = dt.multiply(@movVector.dot(dt))
+    @movVector.addVector coorDifference.multiply((ball.mass * (v2 - v1) + @mass * v1 + ball.mass * v2) / massSum)
+    ball.movVector = dt.multiply(ball.movVector.dot(dt))
+    ball.movVector.addVector coorDifference.multiply((@mass * (v1 - v2) + ball.mass * v2 + @mass * v1) / massSum)
+
+  checkBorderMoveAndInvert: (vx, vy, width, height) ->
+    ratio = @checkBallAndBorder(vx, vy, width, height)
+    @move(vx, vy, ratio.minRatio)
+    @checkInvertMove(ratio.xRatio, ratio.yRatio)
 
 class Game
   init: ->
@@ -128,28 +140,37 @@ class Game
   createBallButton: ->
     @canvas.addEventListener "mousedown", @getClickPosition, false
 
+  getObstaclePosition: () ->
+
+
+  createObstacleButton: ->
+    @canvas.addEventListener "mousemove", @getObstaclePosition, false
+
+  deleteFieldObjects: ->
+
   draw: ->
-    for ball in @simpleBalls
-      ball.draw()
+    for ball1 in @simpleBalls
+      ball1.draw()
 
   update: ->
     @context.clearRect(0,0, 800, 600)
     @updatePosition()
     @draw()
 
-  animate: ->    
+  animate: ->
     animation = (obj) ->
       obj.update()
-      setTimeout((-> animation obj),10)
+      setTimeout((-> animation obj),1)
     animation(this)
 
   updatePosition: () ->
     width = game.gameField.width
     height = game.gameField.height
     for ball in @simpleBalls
-      ###for ball2 in @simpleBalls
+      for ball2 in @simpleBalls
         if ball != ball2
-          ball.checkBallCollision(ball2)###
-      ball.move(ball.movVector.vx, ball.movVector.vy, width, height)
+          ball.checkBallCollision(ball2, width, height)
+      ball.addGravity(0.098)
+      ball.checkBorderMoveAndInvert(ball.movVector.x, ball.movVector.y, width, height)
 
 game = new Game()
