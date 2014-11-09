@@ -123,9 +123,8 @@ class Game
     parentPosition = getPosition(e.currentTarget)
     xPosition = e.clientX - parentPosition.x
     yPosition = e.clientY - parentPosition.y
-    newBall = new Ball(game.context, "red", xPosition, yPosition, 10, 2, 2)
-    game.simpleBalls.push newBall
-    newBall.draw()
+    x: xPosition
+    y: yPosition
 
   getPosition = (element) ->
     xPosition = 0
@@ -138,13 +137,37 @@ class Game
     y: yPosition
 
   createBallButton: ->
-    @canvas.addEventListener "mousedown", @getClickPosition, false
+    @canvas.addEventListener "mousedown", getPosition: ->
+      coor = @getClickPosition
+      newBall = new Ball(game.context, "red", coor.x, coor.y, 10, 2, 2)
+      game.simpleBalls.push newBall
+      newBall.draw()
+    ,false
 
   getObstaclePosition: () ->
 
 
   createObstacleButton: ->
-    @canvas.addEventListener "mousemove", @getObstaclePosition, false
+    beginPoint = undefined
+    endPoint = undefined
+    flag = 0
+    @canvas.addEventListener "mousedown", (->
+      flag = 0
+      return
+    ), false
+    @canvas.addEventListener "mousemove", (->
+      flag = 1
+      return
+    ), false
+    @canvas.addEventListener "mouseup", (->
+      if flag == 0
+        console.log "click"
+      else
+        console.log "drag"
+        if flag == 1
+          return
+    ), false
+
 
   deleteFieldObjects: ->
 
