@@ -30,6 +30,18 @@ class Rect
     @context.fillStyle = @color
     @context.fillRect @x, @y, @width, @height
 
+class Obstacle
+  constructor: (@context, @color, @xBegin, @yBegin, @xEnd, @yEnd) ->
+    @beginPoint = new Vector(xBegin, yBegin)
+    @endPoint = new Vector(xEnd, yEnd)
+
+  draw: ->
+    @context.beginPath()
+    @context.moveTo(@beginPoint.x, @beginPoint.y)
+    @context.lineTo(@endPoint.x, @endPoint.y)
+    @context.lineWidth = 2
+    @context.strokeStyle = @color
+    @context.stroke()
 
 class Ball
   constructor: (@context, @color, x, y, @radius, vx, vy) ->
@@ -43,6 +55,22 @@ class Ball
     @context.stroke()
     @context.fillStyle = @color
     @context.fill()
+
+  draw_arrow: ->
+    @context.beginPath()
+    headLen = 8
+    angle = Math.atan2(@movVector.y, @movVector.x)
+    @context.moveTo @point.x, @point.y
+    @context.lineTo @point.x + @movVector.x, @point.y + @movVector.y
+    @context.lineTo (@point.x + @movVector.x) - headLen * Math.cos(angle - Math.PI / 6),
+                    (@point.y + @movVector.y) - headLen * Math.sin(angle - Math.PI / 6)
+    @context.moveTo @point.x + @movVector.x, @point.y + @movVector.y
+    @context.lineTo (@point.x + @movVector.x) - headLen * Math.cos(angle + Math.PI / 6),
+                    (@point.y + @movVector.y) - headLen * Math.sin(angle + Math.PI / 6)
+    @context.strokeStyle = "#09A948"
+    @context.lineWidth = 2
+    @context.stroke()
+    return
 
   checkBallAndBorder: (vx, vy, width, height) ->
     checkBorder = (x, vx, radius, border) ->
@@ -80,9 +108,6 @@ class Ball
     if (Math.abs(yRatio / @movVector.y) <= 1)
       @movVector.y = -@movVector.y
 
-  addGravity: (gravity) ->
-    @movVector.y += gravity
-
   checkBallCollision: (ball, width, height) ->
     coorDifference = new Vector(@point.x - ball.point.x, @point.y - ball.point.y)
     radiusSum = @radius + ball.radius
@@ -115,17 +140,10 @@ class Game
     @canvas.width = 800
     @canvas.height = 600
     @context = @canvas.getContext("2d")
-    @gameField = new Rect(@context, "#AAAAAA", 0, 0, 800, 600)
+    @gameField = new Rect(@context, "grey", 0, 0, 800, 600)
     @gameField.draw()
     @simpleBalls = []
-
-  getClickPosition: (e) ->
-    parentPosition = getPosition(e.currentTarget)
-    xPosition = e.clientX - parentPosition.x
-    yPosition = e.clientY - parentPosition.y
-    newBall = new Ball(game.context, "red", xPosition, yPosition, 10, 2, 2)
-    game.simpleBalls.push newBall
-    newBall.draw()
+    @obstacles = []
 
   getPosition = (element) ->
     xPosition = 0
@@ -137,39 +155,115 @@ class Game
     x: xPosition
     y: yPosition
 
+  mouseDownBall: (e) ->
+    @mouseDownFlag = 1
+    parentPosition = getPosition(e.currentTarget)
+    xPosition = e.clientX - parentPosition.x
+    yPosition = e.clientY - parentPosition.y
+    @mouseVectorBegin = new Vector(xPosition, yPosition)
+    newBall = new Ball(game.context, "red", xPosition, yPosition, 10, 0, 0)
+    newBall.draw()
+
+  mouseMoveBall: (e) ->
+    if @mouseDownFlag == 0
+      return
+    @mouseDownFlag = 2
+    parentPosition = getPosition(e.currentTarget)
+    xPosition = e.clientX - parentPosition.x
+    yPosition = e.clientY - parentPosition.y
+    game.context.clearRect(0,0, 800, 600)
+    game.draw()
+    newBall = new Ball(game.context, "red", @mouseVectorBegin.x, @mouseVectorBegin.y, 10,
+      xPosition - @mouseVectorBegin.x, yPosition - @mouseVectorBegin.y)
+    newBall.draw()
+    newBall.draw_arrow()
+    return
+
+  mouseUpBall: (e) ->
+    if @mouseDownFlag < 2
+      return
+    @mouseDownFlag = 0
+    parentPosition = getPosition(e.currentTarget)
+    xPosition = e.clientX - parentPosition.x
+    yPosition = e.clientY - parentPosition.y
+    game.context.clearRect(0,0, 800, 600)
+    game.draw()
+    newBall = new Ball(game.context, "red", @mouseVectorBegin.x, @mouseVectorBegin.y, 10,
+      (xPosition - @mouseVectorBegin.x) / 20, (yPosition - @mouseVectorBegin.y) / 20)
+    game.simpleBalls.push newBall
+    newBall.draw()
+    return
+
   createBallButton: ->
-    @canvas.addEventListener "mousedown", @getClickPosition, false
+    @canvas.removeEventListener "mousedown", @getObstacleBeginPosition, false
+    @canvas.removeEventListener "mousemove", mousemove = ->
+        @mouseDownFlag = 1
+        return
+    , false
+    @canvas.removeEventListener "mouseup", @getObstacleEndPosition, false
+    @canvas.addEventListener "mousedown", @mouseDownBall, false
+    @canvas.addEventListener "mousemove", @mouseMoveBall, false
+    @canvas.addEventListener "mouseup", @mouseUpBall, false
 
-  getObstaclePosition: () ->
+  getObstacleBeginPosition: (e) ->
+    @mouseDownFlag = 1
+    parentPosition = getPosition(e.currentTarget)
+    xPosition = e.clientX - parentPosition.x
+    yPosition = e.clientY - parentPosition.y
+    @mouseVectorBegin = new Vector(xPosition, yPosition)
 
+  getObstacleEndPosition: (e) ->
+    if @mouseDownFlag < 2
+      return
+    @mouseDownFlag = 0
+    parentPosition = getPosition(e.currentTarget)
+    xPosition = e.clientX - parentPosition.x
+    yPosition = e.clientY - parentPosition.y
+    @mouseVectorEnd = new Vector(xPosition, yPosition)
+    coorDifference = new Vector(@mouseVectorEnd.x - @mouseVectorBegin.x,
+                                @mouseVectorEnd.y - @mouseVectorBegin.y)
+    if coorDifference.length() < 15
+      return
+    obstacle = new Obstacle(game.context, "blue", @mouseVectorBegin.x, @mouseVectorBegin.y,
+      @mouseVectorEnd.x, @mouseVectorEnd.y)
+    game.obstacles.push obstacle
+    obstacle.draw()
+    return
 
   createObstacleButton: ->
-    beginPoint = undefined
-    endPoint = undefined
-    flag = 0
-    @canvas.addEventListener "mousedown", (->
-      flag = 0
+    @canvas.removeEventListener "mousedown", @mouseDownBall, false
+    @canvas.removeEventListener "mousemove", @mouseMoveBall, false
+    @canvas.removeEventListener "mouseup", @mouseUpBall, false
+    @mouseDownFlag = 0
+    @canvas.addEventListener "mousedown", @getObstacleBeginPosition, false
+    @canvas.addEventListener "mousemove", mousemove = ->
+      if @mouseDownFlag == 1
+        @mouseDownFlag = 2
       return
-    ), false
-    @canvas.addEventListener "mousemove", (->
-      flag = 1
-      return
-    ), false
-    @canvas.addEventListener "mouseup", (->
-      if flag == 0
-        console.log "click"
-      else
-        console.log "drag"
-        if flag == 1
-          return
-    ), false
-
+    , false
+    @canvas.addEventListener "mouseup", @getObstacleEndPosition, false
 
   deleteFieldObjects: ->
+    @canvas.removeEventListener "mousedown", @mouseDownBall, false
+    @canvas.removeEventListener "mousemove", @mouseMoveBall, false
+    @canvas.removeEventListener "mouseup", @mouseUpBall, false
+    @canvas.removeEventListener "mousedown", @getObstacleBeginPosition, false
+    @canvas.removeEventListener "mousemove", mousemove = ->
+        if @mouseDownFlag == 1
+          @mouseDownFlag = 2
+        return
+    , false
+    @canvas.removeEventListener "mouseup", @getObstacleEndPosition, false
+    @simpleBalls = []
+    @obstacles = []
+    @gameField.draw()
 
   draw: ->
+    @gameField.draw()
     for ball1 in @simpleBalls
       ball1.draw()
+    for obstacle in @obstacles
+      obstacle.draw()
 
   update: ->
     @context.clearRect(0,0, 800, 600)
@@ -189,7 +283,6 @@ class Game
       for ball2 in @simpleBalls
         if ball != ball2
           ball.checkBallCollision(ball2, width, height)
-      ball.addGravity(0.098)
       ball.checkBorderMoveAndInvert(ball.movVector.x, ball.movVector.y, width, height)
 
 game = new Game()

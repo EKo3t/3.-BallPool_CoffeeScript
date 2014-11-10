@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="c8fee3fb-7a0b-48a9-a689-0e8e47a963ec" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/CoffeeScript/ballpool.coffee" afterPath="$PROJECT_DIR$/CoffeeScript/ballpool.coffee" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="3.-BallPool_CoffeeScript.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -29,8 +30,8 @@
       <file leaf-file-name="ballpool.coffee" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/CoffeeScript/ballpool.coffee">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.46409807" vertical-offset="2115" max-vertical-offset="3417">
-              <caret line="140" column="42" selection-start-line="140" selection-start-column="42" selection-end-line="140" selection-end-column="42" />
+            <state vertical-scroll-proportion="0.56567425" vertical-offset="4012" max-vertical-offset="4998">
+              <caret line="255" column="43" selection-start-line="255" selection-start-column="43" selection-end-line="255" selection-end-column="43" />
               <folding />
             </state>
           </provider>
@@ -256,6 +257,24 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/CoffeeScript/ballpool.coffee">
       <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="4794">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ballpool.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="187" max-vertical-offset="357">
+          <caret line="11" column="105" selection-start-line="11" selection-start-column="105" selection-end-line="11" selection-end-column="105" />
+          <folding>
+            <element signature="n#style#0;n#canvas#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/CoffeeScript/ballpool.coffee">
+      <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="3094">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
@@ -366,7 +385,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1020">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="22" selection-end-column="9" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -382,8 +400,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/CoffeeScript/ballpool.coffee">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.46409807" vertical-offset="2115" max-vertical-offset="3417">
-          <caret line="140" column="42" selection-start-line="140" selection-start-column="42" selection-end-line="140" selection-end-column="42" />
+        <state vertical-scroll-proportion="0.56567425" vertical-offset="4012" max-vertical-offset="4998">
+          <caret line="255" column="43" selection-start-line="255" selection-start-column="43" selection-end-line="255" selection-end-column="43" />
           <folding />
         </state>
       </provider>
