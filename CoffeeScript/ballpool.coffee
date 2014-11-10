@@ -144,6 +144,7 @@ class Game
     @gameField.draw()
     @simpleBalls = []
     @obstacles = []
+    @timer = null
 
   getPosition = (element) ->
     xPosition = 0
@@ -244,6 +245,7 @@ class Game
     @canvas.addEventListener "mouseup", @getObstacleEndPosition, false
 
   deleteFieldObjects: ->
+    clearInterval(@timer)
     @canvas.removeEventListener "mousedown", @mouseDownBall, false
     @canvas.removeEventListener "mousemove", @mouseMoveBall, false
     @canvas.removeEventListener "mouseup", @mouseUpBall, false
@@ -271,10 +273,8 @@ class Game
     @draw()
 
   animate: ->
-    animation = (obj) ->
-      obj.update()
-      setTimeout((-> animation obj),1)
-    animation(this)
+    clearInterval(@timer)
+    @timer = setInterval((-> game.update()),1)
 
   updatePosition: () ->
     width = game.gameField.width
