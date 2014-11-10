@@ -165,7 +165,7 @@ class Game
     newBall.draw()
 
   mouseMoveBall: (e) ->
-    if @mouseDownFlag == 0
+    if @mouseDownFlag == 0 || @mouseDownFlag == undefined 
       return
     @mouseDownFlag = 2
     parentPosition = getPosition(e.currentTarget)
@@ -180,7 +180,7 @@ class Game
     return
 
   mouseUpBall: (e) ->
-    if @mouseDownFlag < 2
+    if @mouseDownFlag < 2 || @mouseDownFlag == undefined
       return
     @mouseDownFlag = 0
     parentPosition = getPosition(e.currentTarget)
@@ -213,7 +213,7 @@ class Game
     @mouseVectorBegin = new Vector(xPosition, yPosition)
 
   getObstacleEndPosition: (e) ->
-    if @mouseDownFlag < 2
+    if @mouseDownFlag < 2 || @mouseDownFlag == undefined
       return
     @mouseDownFlag = 0
     parentPosition = getPosition(e.currentTarget)
@@ -254,6 +254,7 @@ class Game
         return
     , false
     @canvas.removeEventListener "mouseup", @getObstacleEndPosition, false
+    clearTimeout(@timer)
     @simpleBalls = []
     @obstacles = []
     @gameField.draw()
@@ -273,7 +274,7 @@ class Game
   animate: ->
     animation = (obj) ->
       obj.update()
-      setTimeout((-> animation obj),1)
+      @timer = setTimeout((-> animation obj),1)
     animation(this)
 
   updatePosition: () ->
