@@ -129,6 +129,62 @@ class Ball
     ball.movVector = dt.multiply(ball.movVector.dot(dt))
     ball.movVector.addVector coorDifference.multiply((@mass * (v1 - v2) + ball.mass * v2 + @mass * v1) / massSum)
 
+  isInBetween = (a, b, c) ->
+    return false if Math.abs(a - b) < 0.000001 or Math.abs(b - c) < 0.000001
+    return (a < b and b < c) or (c < b and b < a)
+
+  intersect = (x1, y1, x2, y2, x3, y3, x4, y4) ->
+    xI = undefined
+    yI = undefined
+    a1 = y2 - y1
+    b1 = x1 - x2
+    c1 = a1 * x1 + b1 * y1
+    a2 = y4 - y3
+    b2 = x3 - x4
+    c2 = a2 * x3 + b2 * y3
+    d = a1 * b2 - a2 * b1
+    if d != 0
+      xI = (b2 * c1 - b1 * c2) / d
+      yI = (a1 * c2 - a2 * c1) / d
+    x: xI
+    y: yI
+
+  intersectABC = (a1, b1, c1, a2, b2, c2) ->
+    d = a1 * b2 - a2 * b1
+    if d != 0
+      xI = (b2 * c1 - b1 * c2) / d
+      yI = (a1 * c2 - a2 * c1) / d
+    x: xI
+    y: yI
+
+  checkObstacleCollision: (xBegin, yBegin, xEnd, yEnd) ->
+    xBall1 = @point.x
+    yBall1 = @point.y
+    xBall2 = @point.x + @movVector.x
+    yBall2 = @point.y + @movVector.y
+    intersection = intersect(xBegin, yBegin, xEnd, yEnd, xBall1, yBall1, xBall2, yBall2)
+    if !((isInBetween(xBegin, intersection.x, xEnd) or isInBetween(yBegin, intersection.y, yEnd)) and
+      (isInBetween(xBall1, intersection.x, xBall2) or isInBetween(yBall1, intersection.y, yBall2)))
+        return
+    a1 = yEnd - yBegin
+    b1 = xBegin - xEnd
+    c1 = a1 * xBegin + b1 * yBegin
+    a2 = b1
+    b2 = -a1
+    c2 = a2 * xBall1 + b2 * yBall1
+    normIntersctn = intersectABC(a1, b1, c1, a2, b2, c2)
+    hypVector = new Vector(intersection.x - xBall1, intersection.y - yBall1)
+    dist = hypVector.length()
+    normVector = new Vector(-normIntersctn.x + xBall1, -normIntersctn.y + yBall1)
+    normDist = normVector.length()
+    sinCorner = normDist / dist
+    doubleVector = new Vector(intersection.x * 2 - normIntersctn.x, intersection.y *2 - normIntersctn.y)
+    doubleVector.addVector(normVector)
+    if (@radius / sinCorner + @movVector.length() < dist)
+      return
+
+
+
   checkBorderMoveAndInvert: (vx, vy, width, height) ->
     ratio = @checkBallAndBorder(vx, vy, width, height)
     @move(vx, vy, ratio.minRatio)
@@ -137,10 +193,10 @@ class Ball
 class Game
   init: ->
     @canvas = document.getElementById("ballpool")
-    @canvas.width = 800
-    @canvas.height = 600
+    @canvas.width = window.outerWidth-20
+    @canvas.height = 590
     @context = @canvas.getContext("2d")
-    @gameField = new Rect(@context, "grey", 0, 0, 800, 600)
+    @gameField = new Rect(@context, "grey", 0, 0, window.outerWidth-20, 590)
     @gameField.draw()
     @simpleBalls = []
     @obstacles = []
@@ -157,7 +213,8 @@ class Game
     y: yPosition
 
   mouseDownBall: (e) ->
-    @mouseDownFlag = 1
+    @mouseUp = 0
+    @mouseDown = 1
     parentPosition = getPosition(e.currentTarget)
     xPosition = e.clientX - parentPosition.x
     yPosition = e.clientY - parentPosition.y
@@ -166,13 +223,13 @@ class Game
     newBall.draw()
 
   mouseMoveBall: (e) ->
-    if @mouseDownFlag == 0 || @mouseDownFlag == undefined 
+    if @mouseUp == 1 || @mouseDown == 0 || @mouseDown == undefined
       return
-    @mouseDownFlag = 2
+    @mouseMove = 1
     parentPosition = getPosition(e.currentTarget)
     xPosition = e.clientX - parentPosition.x
     yPosition = e.clientY - parentPosition.y
-    game.context.clearRect(0,0, 800, 600)
+    game.context.clearRect(0,0, window.outerWidth-20, 590)
     game.draw()
     newBall = new Ball(game.context, "red", @mouseVectorBegin.x, @mouseVectorBegin.y, 10,
       xPosition - @mouseVectorBegin.x, yPosition - @mouseVectorBegin.y)
@@ -181,13 +238,15 @@ class Game
     return
 
   mouseUpBall: (e) ->
-    if @mouseDownFlag < 2 || @mouseDownFlag == undefined
+    if (@mouseDown == 0) || (@mouseMove == 0)
       return
-    @mouseDownFlag = 0
+    @mouseDown = 0
+    @mouseMove = 0
+    @mouseUp = 1
     parentPosition = getPosition(e.currentTarget)
     xPosition = e.clientX - parentPosition.x
     yPosition = e.clientY - parentPosition.y
-    game.context.clearRect(0,0, 800, 600)
+    game.context.clearRect(0,0, window.outerWidth-20, 590)
     game.draw()
     newBall = new Ball(game.context, "red", @mouseVectorBegin.x, @mouseVectorBegin.y, 10,
       (xPosition - @mouseVectorBegin.x) / 20, (yPosition - @mouseVectorBegin.y) / 20)
@@ -197,26 +256,41 @@ class Game
 
   createBallButton: ->
     @canvas.removeEventListener "mousedown", @getObstacleBeginPosition, false
-    @canvas.removeEventListener "mousemove", mousemove = ->
-        @mouseDownFlag = 1
-        return
-    , false
+    @canvas.removeEventListener "mousemove", @getObstacleMovePosition, false
     @canvas.removeEventListener "mouseup", @getObstacleEndPosition, false
     @canvas.addEventListener "mousedown", @mouseDownBall, false
     @canvas.addEventListener "mousemove", @mouseMoveBall, false
     @canvas.addEventListener "mouseup", @mouseUpBall, false
 
   getObstacleBeginPosition: (e) ->
-    @mouseDownFlag = 1
+    @mouseUp = 0
+    @mouseDown = 1
     parentPosition = getPosition(e.currentTarget)
     xPosition = e.clientX - parentPosition.x
     yPosition = e.clientY - parentPosition.y
     @mouseVectorBegin = new Vector(xPosition, yPosition)
 
-  getObstacleEndPosition: (e) ->
-    if @mouseDownFlag < 2 || @mouseDownFlag == undefined
+  getObstacleMovePosition: (e) ->
+    if @mouseUp == 1 || @mouseDown == 0 || @mouseDown == undefined
       return
-    @mouseDownFlag = 0
+    @mouseMove = 1
+    parentPosition = getPosition(e.currentTarget)
+    xPosition = e.clientX - parentPosition.x
+    yPosition = e.clientY - parentPosition.y
+    @mouseVectorEnd = new Vector(xPosition, yPosition)
+    game.context.clearRect(0,0, window.outerWidth-20, 590)
+    game.draw()
+    obstacle = new Obstacle(game.context, "blue", @mouseVectorBegin.x, @mouseVectorBegin.y,
+      @mouseVectorEnd.x, @mouseVectorEnd.y)
+    obstacle.draw()
+    return
+
+  getObstacleEndPosition: (e) ->
+    if @mouseDown == 0 || @mouseMove == 0
+      return
+    @mouseDown = 0
+    @mouseMove = 0
+    @mouseUp = 1
     parentPosition = getPosition(e.currentTarget)
     xPosition = e.clientX - parentPosition.x
     yPosition = e.clientY - parentPosition.y
@@ -237,11 +311,7 @@ class Game
     @canvas.removeEventListener "mouseup", @mouseUpBall, false
     @mouseDownFlag = 0
     @canvas.addEventListener "mousedown", @getObstacleBeginPosition, false
-    @canvas.addEventListener "mousemove", mousemove = ->
-      if @mouseDownFlag == 1
-        @mouseDownFlag = 2
-      return
-    , false
+    @canvas.addEventListener "mousemove", @getObstacleMovePosition, false
     @canvas.addEventListener "mouseup", @getObstacleEndPosition, false
 
   deleteFieldObjects: ->
@@ -250,11 +320,7 @@ class Game
     @canvas.removeEventListener "mousemove", @mouseMoveBall, false
     @canvas.removeEventListener "mouseup", @mouseUpBall, false
     @canvas.removeEventListener "mousedown", @getObstacleBeginPosition, false
-    @canvas.removeEventListener "mousemove", mousemove = ->
-        if @mouseDownFlag == 1
-          @mouseDownFlag = 2
-        return
-    , false
+    @canvas.removeEventListener "mousemove", @getObstacleMovePosition, false
     @canvas.removeEventListener "mouseup", @getObstacleEndPosition, false
     clearTimeout(@timer)
     @simpleBalls = []
@@ -269,20 +335,13 @@ class Game
       obstacle.draw()
 
   update: ->
-    @context.clearRect(0,0, 800, 600)
+    @context.clearRect(0,0, window.outerWidth-20, 590)
     @updatePosition()
     @draw()
 
   animate: ->
-<<<<<<< HEAD
-    animation = (obj) ->
-      obj.update()
-      @timer = setTimeout((-> animation obj),1)
-    animation(this)
-=======
     clearInterval(@timer)
     @timer = setInterval((-> game.update()),1)
->>>>>>> origin/master
 
   updatePosition: () ->
     width = game.gameField.width
@@ -291,6 +350,8 @@ class Game
       for ball2 in @simpleBalls
         if ball != ball2
           ball.checkBallCollision(ball2, width, height)
+      for obstacle in @obstacles
+        ball.checkObstacleCollision(obstacle.xBegin, obstacle.yBegin, obstacle.xEnd, obstacle.yEnd)
       ball.checkBorderMoveAndInvert(ball.movVector.x, ball.movVector.y, width, height)
 
 game = new Game()
