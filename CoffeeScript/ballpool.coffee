@@ -163,8 +163,7 @@ class Ball
     xBall2 = @point.x + @movVector.x
     yBall2 = @point.y + @movVector.y
     intersection = intersect(xBegin, yBegin, xEnd, yEnd, xBall1, yBall1, xBall2, yBall2)
-    if !((isInBetween(xBegin, intersection.x, xEnd) or isInBetween(yBegin, intersection.y, yEnd)) and
-      (isInBetween(xBall1, intersection.x, xBall2) or isInBetween(yBall1, intersection.y, yBall2)))
+    if !(isInBetween(xBegin, intersection.x, xEnd) or isInBetween(yBegin, intersection.y, yEnd))
         return
     a1 = yEnd - yBegin
     b1 = xBegin - xEnd
@@ -180,9 +179,14 @@ class Ball
     sinCorner = normDist / dist
     doubleVector = new Vector(intersection.x * 2 - normIntersctn.x, intersection.y *2 - normIntersctn.y)
     doubleVector.addVector(normVector)
+    newMovVector = new Vector(doubleVector.x - intersection.x, doubleVector.y - intersection.y)
+    newMovVector.multiply(@movVector.length() / dist)
     if (@radius / sinCorner + @movVector.length() < dist)
       return
-
+    ballMoveVector = @movVector
+    ballMoveVector.multiply((dist - @radius / sinCorner) / @movVector.length())
+    @point.addVector(ballMoveVector)
+    @movVector = newMovVector
 
 
   checkBorderMoveAndInvert: (vx, vy, width, height) ->

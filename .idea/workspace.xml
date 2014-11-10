@@ -29,8 +29,8 @@
       <file leaf-file-name="ballpool.coffee" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/CoffeeScript/ballpool.coffee">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.48207885" vertical-offset="2553" max-vertical-offset="6171">
-              <caret line="166" column="87" selection-start-line="166" selection-start-column="87" selection-end-line="166" selection-end-column="87" />
+            <state vertical-scroll-proportion="0.08781362" vertical-offset="2756" max-vertical-offset="6239">
+              <caret line="165" column="96" selection-start-line="165" selection-start-column="96" selection-end-line="165" selection-end-column="96" />
               <folding />
             </state>
           </provider>
@@ -398,26 +398,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ballpool.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="7837">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/javascript/ballpool.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="7956">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/CoffeeScript/ballpool.coffee">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.48207885" vertical-offset="2553" max-vertical-offset="6171">
-          <caret line="166" column="87" selection-start-line="166" selection-start-column="87" selection-end-line="166" selection-end-column="87" />
+        <state vertical-scroll-proportion="0.08781362" vertical-offset="2756" max-vertical-offset="6239">
+          <caret line="165" column="96" selection-start-line="165" selection-start-column="96" selection-end-line="165" selection-end-column="96" />
           <folding />
         </state>
       </provider>
