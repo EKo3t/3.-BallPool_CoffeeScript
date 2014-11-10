@@ -180,11 +180,12 @@ class Ball
     doubleVector = new Vector(intersection.x * 2 - normIntersctn.x, intersection.y *2 - normIntersctn.y)
     doubleVector.addVector(normVector)
     newMovVector = new Vector(doubleVector.x - intersection.x, doubleVector.y - intersection.y)
-    newMovVector.multiply(@movVector.length() / dist)
+    newMovVector = newMovVector.multiply(@movVector.length() / dist)
     if (@radius / sinCorner + @movVector.length() < dist)
       return
-    ballMoveVector = @movVector
-    ballMoveVector.multiply((dist - @radius / sinCorner) / @movVector.length())
+    ballMoveVector = new Vector(@movVector.x, @movVector.y)
+    ratio = (dist - @radius / sinCorner) / @movVector.length()
+    ballMoveVector = ballMoveVector.multiply(ratio)
     @point.addVector(ballMoveVector)
     @movVector = newMovVector
 

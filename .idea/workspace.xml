@@ -29,8 +29,8 @@
       <file leaf-file-name="ballpool.coffee" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/CoffeeScript/ballpool.coffee">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.08781362" vertical-offset="2756" max-vertical-offset="6239">
-              <caret line="165" column="96" selection-start-line="165" selection-start-column="96" selection-end-line="165" selection-end-column="96" />
+            <state vertical-scroll-proportion="0.609319" vertical-offset="2754" max-vertical-offset="6256">
+              <caret line="182" column="19" selection-start-line="182" selection-start-column="19" selection-end-line="182" selection-end-column="19" />
               <folding />
             </state>
           </provider>
@@ -400,8 +400,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/CoffeeScript/ballpool.coffee">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.08781362" vertical-offset="2756" max-vertical-offset="6239">
-          <caret line="165" column="96" selection-start-line="165" selection-start-column="96" selection-end-line="165" selection-end-column="96" />
+        <state vertical-scroll-proportion="0.609319" vertical-offset="2754" max-vertical-offset="6256">
+          <caret line="182" column="19" selection-start-line="182" selection-start-column="19" selection-end-line="182" selection-end-column="19" />
           <folding />
         </state>
       </provider>
