@@ -89,7 +89,6 @@ class Ball
     dvy = checkBorder(@point.y, @movVector.y, @radius, height)
     dv = Math.abs(getMin(dvx / vx, dvy / vy))
     if dv == Infinity
-      console.log("maybe shit")
       yRatio: dvy / vy
       xRatio: dvx / vx
       minRatio: 1
@@ -181,14 +180,20 @@ class Ball
     doubleVector.addVector(normVector)
     newMovVector = new Vector(doubleVector.x - intersection.x, doubleVector.y - intersection.y)
     newMovVector = newMovVector.multiply(@movVector.length() / dist)
+    ratio = (dist - @radius / sinCorner) / @movVector.length()
     if (@radius / sinCorner + @movVector.length() < dist)
+      return
+    if !(isInBetween(xBall1, intersection.x, xBall2) or isInBetween(yBall1, intersection.y, yBall2))
       return
     ballMoveVector = new Vector(@movVector.x, @movVector.y)
     ratio = (dist - @radius / sinCorner) / @movVector.length()
     ballMoveVector = ballMoveVector.multiply(ratio)
     @point.addVector(ballMoveVector)
+    hypVector = new Vector(intersection.x - xBall1, intersection.y - yBall1)
+    dist = hypVector.length()
+    if dist < @radius
+      console.log("some shit")
     @movVector = newMovVector
-
 
   checkBorderMoveAndInvert: (vx, vy, width, height) ->
     ratio = @checkBallAndBorder(vx, vy, width, height)
@@ -218,7 +223,6 @@ class Game
     y: yPosition
 
   mouseDownBall: (e) ->
-    @mouseUp = 0
     @mouseDown = 1
     parentPosition = getPosition(e.currentTarget)
     xPosition = e.clientX - parentPosition.x
@@ -228,7 +232,10 @@ class Game
     newBall.draw()
 
   mouseMoveBall: (e) ->
-    if @mouseUp == 1 || @mouseDown == 0 || @mouseDown == undefined
+    if @mouseDown == 0 || @mouseDown == undefined
+      return
+    if @mouseMove == 2
+      @mouseMove = 0
       return
     @mouseMove = 1
     parentPosition = getPosition(e.currentTarget)
@@ -246,7 +253,7 @@ class Game
     if (@mouseDown == 0) || (@mouseMove == 0)
       return
     @mouseDown = 0
-    @mouseMove = 0
+    @mouseMove = 2
     @mouseUp = 1
     parentPosition = getPosition(e.currentTarget)
     xPosition = e.clientX - parentPosition.x
@@ -355,7 +362,7 @@ class Game
       for ball2 in @simpleBalls
         if ball != ball2
           ball.checkBallCollision(ball2, width, height)
-      for obstacle in @obstacles
+      for obstacle in game.obstacles
         ball.checkObstacleCollision(obstacle.xBegin, obstacle.yBegin, obstacle.xEnd, obstacle.yEnd)
       ball.checkBorderMoveAndInvert(ball.movVector.x, ball.movVector.y, width, height)
 
